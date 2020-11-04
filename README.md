@@ -6,10 +6,10 @@ A tool to host, deploy and configure Splunk Universal Forwarders and Sysinternal
 On first running, you will have to define some key variables first from within the Varibles menu. These are the Splunk indexer IP:port, Splunk Deployment Server IP:port, Splunk Index name, the name of the Splunk Universal Forwarder msi, the Sysmon executable and the Sysmon config xml file. Once defined, configure the local SMB share from the Server menu. This is just a stop or start option, no further configuration required. Next from within the Client menu; transfer the files to the endpoints, install the Universal Forwarder, followed by install Sysmon. Optional house cleaning by removing the installation files and staging directory can also be done. You can also install Splunk Universal Forwarder and Sysmon should you require to do so.
 
 ## Version History
-_2.0.0.Beta_
+### 2.0.0.Beta
 Initial public release
 
-_2.0.1.Beta_
+### 2.0.1.Beta
 Changed wording of Install *Install HIDS* to *Install Universal Forwarder* to be clearer as to what it was doing. 
 
 ## To-Do
