@@ -11,7 +11,7 @@
 .OUTPUTS
   None
 .NOTES
-  Version:        2.0.0.beta
+  Version:        2.0.1.beta
   Author:         Acidcrash376
   Creation Date:  10/06/2020
   Last Update:	  04/11/2020
@@ -351,8 +351,8 @@ Process {
 			Write-Host "`tClient Config" -ForegroundColor Yellow
 			Write-Host "`t-------------" -ForegroundColor Yellow
 			Write-Host "`t1 Download installation Files via SMB  " -ForegroundColor Green
-			Write-Host "`t2 Install HIDS                         " -ForegroundColor Green 
-			Write-Host "`t3 Uninstall HIDS                       " -ForegroundColor Green
+			Write-Host "`t2 Install Universal Forwarder          " -ForegroundColor Green 
+			Write-Host "`t3 Uninstall Universal Forwarder        " -ForegroundColor Green
             Write-Host "`t4 Install Sysmon                       " -ForegroundColor Green
             Write-Host "`t5 Remove Sysmon                        " -ForegroundColor Green
 			Write-Host "`t6 Restart Endpoints	                 " -ForegroundColor Green
