@@ -12,8 +12,15 @@ Initial public release
 ### 2.0.1.Beta
 Changed wording of Install *Install HIDS* to *Install Universal Forwarder* to be clearer as to what it was doing. 
 
+### 2.0.2.Beta
+Diagnostics Menu added
+Check services, Restart Services and Start Services added to Diagnostics Menu
+List Computers, Ping Computers, Test WinRM connection moved to Diagnostics Menu
+Configure Sysmon inputs.conf file added to Clients Config Menu
+
+
 ## To-Do
-1. Create a Diagnostics menu
-2. Move List Host, Ping Host, Test WinRM on Host options to Diagnostics
-3. Create a Check Service and Restart Service check in Diagnostics
+1. ~~Create a Diagnostics menu
+2. ~~Move List Host, Ping Host, Test WinRM on Host options to Diagnostics
+3. ~~Create a Check Service and Restart Service check in Diagnostics
 4. Add a function to populate the computers.txt from active directory
