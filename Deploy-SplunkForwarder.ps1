@@ -10,7 +10,7 @@
 .OUTPUTS
   None
 .NOTES
-  Version:        2.0.1.beta
+  Version:        2.0.2.beta
   Author:         Acidcrash376
   Creation Date:  10/06/2020
   Last Update:	  07/11/2020
@@ -446,7 +446,7 @@ Process {
 			Write-Host "`t3 Test WinRM connection                   " -ForegroundColor Green
 			Write-Host "`t4 Check Services            	            " -ForegroundColor Green #-NoNewline; Write-Host "`t[Not Implemented Yet]" -ForegroundColor Red -BackgroundColor Black
 			Write-Host "`t5 Restart Services                        " -ForegroundColor Green #-NoNewline; Write-Host "`t[Not Implemented Yet]" -ForegroundColor Red -BackgroundColor Black
-            Write-Host "`t6 Start Services                          " -ForegroundColor Green -NoNewline; Write-Host "`t[Not Implemented Yet" -ForegroundColor Red -BackgroundColor Black
+            Write-Host "`t6 Start Services                          " -ForegroundColor Green #-NoNewline; Write-Host "`t[Not Implemented Yet" -ForegroundColor Red -BackgroundColor Black
             Write-Host
 			Write-Host "`tM Back to Main menu"  -ForegroundColor Green
 			Write-Host "`tQ Exit Script											" -ForegroundColor Green
@@ -1174,7 +1174,7 @@ Clear-Host
 			Write-Host "`tVersion" -ForegroundColor Yellow
 			Write-Host "`t-------" -ForegroundColor Yellow
             Write-Host 
-            Write-Host "`tVersion:        2.0.1.Beta"
+            Write-Host "`tVersion:        2.0.2.Beta"
             Write-Host "`tLast Update:    07/11/2020"
             Write-Host "`tAuthor:         Kevin Brooks"
             Write-Host "`tURL:            https://github.com/acidcrash376/Deploy-SplunkForwarder"
