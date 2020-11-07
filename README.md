@@ -20,7 +20,8 @@ Configure Sysmon inputs.conf file added to Clients Config Menu
 
 
 ## To-Do
-1. ~~Create a Diagnostics menu
-2. ~~Move List Host, Ping Host, Test WinRM on Host options to Diagnostics
-3. ~~Create a Check Service and Restart Service check in Diagnostics
+1. ~~Create a Diagnostics menu~~
+2. ~~Move List Host, Ping Host, Test WinRM on Host options to Diagnostics~~
+3. ~~Create a Check Service and Restart Service check in Diagnostics~~
 4. Add a function to populate the computers.txt from active directory
+5. Import computers list from Active Directory
