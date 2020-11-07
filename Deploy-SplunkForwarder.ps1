@@ -1,4 +1,3 @@
-#requires -version 2
 <#
 .SYNOPSIS
   A script to manage Splunk Universal Forwarders
@@ -14,7 +13,7 @@
   Version:        2.0.1.beta
   Author:         Acidcrash376
   Creation Date:  10/06/2020
-  Last Update:	  04/11/2020
+  Last Update:	  07/11/2020
   Purpose/Change: Initial script development
   Web:            https://github.com/acidcrash376/Deploy-SplunkForwarder
 .EXAMPLE
@@ -104,7 +103,7 @@ Process {
 			Write-Host "`t1 Variables" -ForegroundColor Green # -NoNewline; Write-Host "`t`t`t[100% Complete]" -ForegroundColor Green -BackgroundColor Black
 			Write-Host "`t2 Server Side Config" -ForegroundColor Green # -NoNewline; Write-Host "`t`t[100% Complete]" -ForegroundColor Green -BackgroundColor Black
 			Write-Host "`t3 Client Config" -ForegroundColor Green # -NoNewline; Write-Host "`t`t`t[90% Complete]" -ForegroundColor Yellow -BackgroundColor Black
-			#Write-Host "`t4 Universal Forwarder Config"-ForegroundColor Green -NoNewline; Write-Host "`t[0% Complete]" -ForegroundColor Red -BackgroundColor Black
+			Write-Host "`t4 Diagnostics"-ForegroundColor Green #-NoNewline; Write-Host "`t[60% Complete]" -ForegroundColor Yellow -BackgroundColor Black
 			Write-Host
 			Write-Host
 			Write-Host "`tQ Exit Script" -ForegroundColor Green
@@ -143,7 +142,7 @@ Process {
 				1 { FnVariables-Options }
 				2 { FnServerSide-Options }
 				3 { FnClientConfig-Options }
-				#4 { FnSUFConfig-Options }
+				4 { FnDiagnostics-Options }
                 H { FnHelp }
 				C { FnCredits }
                 V { FnVersion }
@@ -354,13 +353,13 @@ Process {
 			Write-Host "`t2 Install Universal Forwarder          " -ForegroundColor Green 
 			Write-Host "`t3 Uninstall Universal Forwarder        " -ForegroundColor Green
             Write-Host "`t4 Install Sysmon                       " -ForegroundColor Green
-            Write-Host "`t5 Remove Sysmon                        " -ForegroundColor Green
-			Write-Host "`t6 Restart Endpoints	                 " -ForegroundColor Green
-			#Write-Host "`t4 Download installation Files via HTTP " -ForegroundColor Green -NoNewline; Write-Host "`t`t[Not Implemented Yet]" -ForegroundColor Red -BackgroundColor Black
-			Write-Host "`t7 Remove installation Files            " -ForegroundColor Green
-			Write-Host "`t8 List Hosts	                         " -ForegroundColor Green		
-			Write-Host "`t9 Ping Hosts                           " -ForegroundColor Green
-			Write-Host "`t0 Test WinRM connection to hosts	     " -ForegroundColor Green
+            Write-Host "`t5 Enable Sysmon in Slunk Forwarder     " -ForegroundColor Green
+            Write-Host "`t6 Remove Sysmon                        " -ForegroundColor Green
+			Write-Host "`t7 Restart Endpoints	                 " -ForegroundColor Green
+			Write-Host "`t8 Remove installation Files            " -ForegroundColor Green
+			#Write-Host "`t8 List Hosts	                         " -ForegroundColor Green		
+			#Write-Host "`t9 Ping Hosts                           " -ForegroundColor Green
+			#Write-Host "`t0 Test WinRM connection to hosts	     " -ForegroundColor Green
 			Write-Host
 			Write-Host "`tM Back to Main menu"  -ForegroundColor Green
 			Write-Host "`tQ Exit Script											" -ForegroundColor Green
@@ -395,17 +394,99 @@ Process {
                 2 { FnInstallHIDS }
 				3 { FnUninstallHIDS }
 				4 { FnInstallSysmon }
-				#4 { FnDownloadFilesHTTP }
-                5 { FnUninstallSysmon }
-				6 { FnRestartEndpoints }
-				7 { FnRemoveFiles }
-				8 { FnListHosts }
-				9 { FnTestComputers }
-				0 { FnTestWinRMComputers }
+                5 { FnEnableSysmon }
+				6 { FnUninstallSysmon }
+				7 { FnRestartEndpoints }
+				8 { FnRemoveFiles }
+                
+				#8 { FnListHosts }
+				#9 { FnTestComputers }
+				#0 { FnTestWinRMComputers }
 				Q { FnExitScript }
 				M { FnMain-Options }
 				}
 				FnVariables-Menu
+			}
+			Catch {
+            Write-Host -BackgroundColor Red "Error: $($_.Exception)"
+            Break
+            }
+        }
+		End {
+            If ($?) {
+                      Write-Host 'FnVariables-Menu'
+                      Write-Host ' '
+                    }
+        }
+}
+
+Function FnDiagnostics-Options {
+Param (
+)
+Begin {
+}
+Process {
+		Try {
+			$SplunkIndex = Get-Content -Path ".\SplunkIndexip.txt"
+			$SplunkDeploymentServer = Get-Content -Path ".\SplunkDeploymentServerip.txt"
+			#$DownloadServer = Get-Content -Path ".\DownloadServerip.txt"
+			$Computers = Get-Content -Path ".\computers.txt"
+			$index = Get-Content -Path ".\Index.txt"
+			$FnSufFILEName = Get-Content -Path ".\SufFILEName.txt"
+			
+			Clear-Host
+			Write-Host
+			Write-Host "`t[ " -ForegroundColor Yellow -BackgroundColor Black -NoNewline; Write-Host "Splunk Universal Forwarder Deployment Tool" -ForegroundColor White -BackgroundColor Black -NoNewline; Write-Host " ]" -ForegroundColor Yellow -BackgroundColor Black
+			Write-Host
+			Write-Host
+			Write-Host "`tDiagnostics Menu" -ForegroundColor Yellow
+			Write-Host "`t----------------" -ForegroundColor Yellow
+			Write-Host "`t1 List Hosts     							" -ForegroundColor Green
+			Write-Host "`t2 Ping Hosts                              " -ForegroundColor Green
+			Write-Host "`t3 Test WinRM connection                   " -ForegroundColor Green
+			Write-Host "`t4 Check Services            	            " -ForegroundColor Green #-NoNewline; Write-Host "`t[Not Implemented Yet]" -ForegroundColor Red -BackgroundColor Black
+			Write-Host "`t5 Restart Services                        " -ForegroundColor Green #-NoNewline; Write-Host "`t[Not Implemented Yet]" -ForegroundColor Red -BackgroundColor Black
+            Write-Host "`t6 Start Services                          " -ForegroundColor Green -NoNewline; Write-Host "`t[Not Implemented Yet" -ForegroundColor Red -BackgroundColor Black
+            Write-Host
+			Write-Host "`tM Back to Main menu"  -ForegroundColor Green
+			Write-Host "`tQ Exit Script											" -ForegroundColor Green
+			Write-Host 
+			FnDiagnostics-Menu
+            }
+            Catch {
+            Write-Host -BackgroundColor Red "Error: $($_.Exception)"
+            FnPause-ForInput
+            Break
+            }
+        }
+        End {
+            If ($?) {
+                      Write-Host 'FnVariables-Options'
+                      Write-Host ' '
+                    }
+        }
+}
+
+Function FnDiagnostics-Menu {
+Param (
+        [String]$userinput = $(Write-Host 'Select an Option: ' -foregroundcolor Yellow -NoNewLine; Read-Host)
+)
+Begin {
+}
+Process {
+        Try {
+            Switch ( $userinput )
+                {
+				1 { FnListHosts }
+				2 { FnTestComputers }
+				3 { FnTestWinRMComputers }
+				4 { FnCheckServices }
+                5 { FnRestartServices }
+                6 { FnStartServices }
+				Q { FnExitScript }
+				M { FnMain-Options }
+				}
+				FnServerSide-Menu
 			}
 			Catch {
             Write-Host -BackgroundColor Red "Error: $($_.Exception)"
@@ -651,6 +732,10 @@ Function FnHostFILE {
         }  Else {
         Write-Host "`tYou need a computers.txt file in this directory, you need to make one!!" -ForegroundColor Red
         } 
+}
+
+Function FnGetComputers {
+    $Global:Computers = Get-Content ".\computers.txt"
 }
 <########################################################################################################### 
 These functions are for the framework of the script
@@ -1089,8 +1174,8 @@ Clear-Host
 			Write-Host "`tVersion" -ForegroundColor Yellow
 			Write-Host "`t-------" -ForegroundColor Yellow
             Write-Host 
-            Write-Host "`tVersion:        2.0.0.Beta"
-            Write-Host "`tLast Update:    04/11/2020"
+            Write-Host "`tVersion:        2.0.1.Beta"
+            Write-Host "`tLast Update:    07/11/2020"
             Write-Host "`tAuthor:         Kevin Brooks"
             Write-Host "`tURL:            https://github.com/acidcrash376/Deploy-SplunkForwarder"
             Write-Host
@@ -1636,6 +1721,80 @@ Function FnUnInstallSysmon {
 	}
 }
 
+Function FnEnableSysmon {
+    Param()
+    Begin{
+    }
+    Process {
+        Try {
+            $global:computers = Get-Content ".\computers.txt"
+            Foreach ($h in $computers) {
+                $s = New-PSSession -ComputerName $h #-Credential $creds
+                Write-Host "Host: $h" -ForegroundColor Green
+                #Invoke-Command -ComputerName $h -ScriptBlock {
+                Invoke-Command -Session $s -ScriptBlock {
+                    $splunkdir = "$env:ProgramFiles\SplunkUniversalForwarder"
+                    $splunkpath = "$splunkdir\etc\apps\TA-microsoft-sysmon\local"
+                    $inputs = "$splunkpath\inputs.conf"
+                    #$splunkdir
+                    #$splunkpath
+                    #$inputs
+
+                    $t1 = Test-Path $splunkdir
+
+
+                    If($t1) {
+                        #Write-Host "Test 1"
+                        $t2 = Test-Path $splunkpath
+
+
+                        If($t2) {
+                            #Write-Host "Test 2"
+                            $sysmonstring = Select-String -Path "$inputs" -Pattern 'disabled = true'
+                            
+                            
+                            If ($sysmonstring) {
+                                #Write-Host "String found!" -ForegroundColor Yellow
+                                $content = Get-Content "$inputs"
+                                $replace = $content -replace 'disabled = true','disabled = false'
+                                $replace | Set-Content -Path $inputs
+                                Write-Host "Sysmon input enabled" -ForegroundColor Green
+                                Stop-Service SplunkForwarder | Out-Null
+                                Start-Service SplunkForwarder | Out-Null
+                            }
+                            Else {
+                                Write-Host "The string 'disabled = true' was not found in the inputs.conf file" -ForegroundColor Yellow
+                                #Get-Content -Path $inputs
+                            }
+
+
+                        }
+                        Else { 
+                            Write-Host "The TA Sysmon Splunk App was not found, please ensure the deployment server is configured correctly" -ForegroundColor Red
+                        }
+
+
+                    }
+                    Else {
+                    Write-Host "The Splunk Universal Forwarder was not found" -ForegroundColor Red
+                    }
+
+                
+                    #$inputs = "$env:ProgramFiles\$splunkpath\inputs.conf"
+                    #$content = Get-Content $inputs
+                    #$newcontent = $content -replace "disabled = true","disabled = false"
+                    #$newcontent | Set-Content -Path $inputs
+                }
+                Write-Host "Closing session" -ForegroundColor Yellow
+                Remove-PSSession -Session $s
+            }
+
+        }
+        Catch {
+        }
+    }
+}
+
 Function FnRemoveFiles {
     Param ()
     Begin{
@@ -1731,7 +1890,7 @@ Process {
 		}
 		Write-Host
 		FnPause-ForInput
-		FnClientConfig-Options
+		FnDiagnostics-Options
 	}
 }
 	
@@ -1758,7 +1917,7 @@ Process {
 		}
 		Write-Host
 		FnPause-ForInput
-		FnClientConfig-Options
+		FnDiagnostics-Options
 	}
 }
 	
@@ -1786,10 +1945,135 @@ Process {
 		}
 		Write-Host
 		FnPause-ForInput
-		FnClientConfig-Options
+		FnDiagnostics-Options
 	}
 }
 
+Function FnCheckServices {
+    Param()
+    Begin{
+        FnGetComputers
+    }
+    Process {
+        Try {
+            
+            Foreach ($h in $computers) {
+                $s = New-PSSession -ComputerName $h
+                Invoke-Command -Session $s -ScriptBlock {
+                    Write-Host "Host: $using:h" -ForegroundColor Green
+                    $svc = (Get-Service SplunkForwarder).Status
+
+                    If($svc -eq "Running") {
+                        Write-Host "Splunk Universal Forwarder is running" -ForegroundColor Green
+                    }
+                    Else {
+                        Write-Host "Splunk Universal Forwarder is not running, attempting to start the service now..." -ForegroundColor Yellow
+                        Start-Service -Name SplunkForwarder -WarningAction SilentlyContinue | Out-Null 
+                        $svc2 = (Get-Service SplunkForwarder).Status
+                        If ($svc2 -ne "Running") {
+                            Write-Host "Splunk Forwarder service is failing to start"
+                        }
+                        Else {
+                            Write-Host "Splunk Forwarder service has successfully started" -ForegroundColor Green
+                        }
+                    }
+                }
+                Remove-PSSession *
+            }
+            FnPause-ForInput
+		    FnDiagnostics-Options
+        }
+        Catch {
+        }
+    }
+}
+
+Function FnRestartServices {
+    Param()
+    Begin{
+        FnGetComputers
+    }
+    Process {
+        Try {
+            
+            Foreach ($h in $computers) {
+                $s = New-PSSession -ComputerName $h
+                Invoke-Command -Session $s -ScriptBlock {
+                    Write-Host "Host: $using:h" -ForegroundColor Green
+                    $svc = (Get-Service SplunkForwarder).Status
+
+                    If($svc -eq "Running") {
+                        Write-Host "Splunk Universal Forwarder is running, attempting to restart now... " -ForegroundColor Yellow
+                        Restart-Service -Name SplunkForwarder -WarningAction SilentlyContinue
+                        $svc2 = (Get-Service SplunkForwarder).Status
+                        If ($svc2 -eq "Running") {
+                            Write-Host "Splunk Forwarder has restarted successfully" -ForegroundColor Green
+                        }
+                        Else {
+                        Write-Host "Splunk Forwarder has failed to restart correctly" -ForegroundColor Red
+                        }
+                    }
+                    Else {
+                        Write-Host "Splunk Universal Forwarder is not running, attempting to start the service now..." -ForegroundColor Yellow
+                        Start-Service -Name SplunkForwarder -WarningAction SilentlyContinue | Out-Null 
+                        $svc2 = (Get-Service SplunkForwarder).Status
+                        If ($svc2 -ne "Running") {
+                            Write-Host "Splunk Forwarder service is failing to start"
+                        }
+                        Else {
+                            Write-Host "Splunk Forwarder service has successfully started" -ForegroundColor Green
+                        }
+                    }
+                }
+                Remove-PSSession *
+            
+            }
+            FnPause-ForInput
+		    FnDiagnostics-Options
+        }
+        Catch {
+        }
+    }
+}
+
+Function FnstartServices {
+    Param()
+    Begin{
+        FnGetComputers
+    }
+    Process {
+        Try {
+            
+            Foreach ($h in $computers) {
+                $s = New-PSSession -ComputerName $h
+                Invoke-Command -Session $s -ScriptBlock {
+                    Write-Host "Host: $using:h" -ForegroundColor Green
+                    $svc = (Get-Service SplunkForwarder).Status
+
+                    If($svc -eq "Running") {
+                        Write-Host "Splunk Universal Forwarder is already running." -ForegroundColor Yellow
+                    }
+                    Else {
+                        Write-Host "Splunk Universal Forwarder is not running, attempting to start the service now..." -ForegroundColor Yellow
+                        Start-Service -Name SplunkForwarder -WarningAction SilentlyContinue | Out-Null 
+                        $svc2 = (Get-Service SplunkForwarder).Status
+                        If ($svc2 -ne "Running") {
+                            Write-Host "Splunk Forwarder service is failing to start"
+                        }
+                        Else {
+                            Write-Host "Splunk Forwarder service has successfully started" -ForegroundColor Green
+                        }
+                    }
+                }
+                Remove-PSSession *
+            }
+            FnPause-ForInput
+		    FnDiagnostics-Options
+        }
+        Catch {
+        }
+    }
+}
 ### SUF Menu ###
 
 
